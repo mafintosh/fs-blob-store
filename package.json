@@ -9,7 +9,11 @@
     "lru-cache": "^2.5.0",
     "mkdirp": "^0.5.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "abstract-blob-store": "^2.1.0",
+    "rimraf": "^2.2.8",
+    "tape": "^2.14.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mafintosh/fs-blob-store.git"

@@ -29,6 +29,8 @@ var BlobStore = function(opts) {
 }
 
 BlobStore.prototype.createWriteStream = function(opts, cb) {
+  if (opts.name && !opts.key) opts.key = opts.name
+
   var key = join(this.path, opts.key)
   var dir = path.dirname(key)
   var cache = this.cache

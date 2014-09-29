@@ -29,6 +29,7 @@ var BlobStore = function(opts) {
 }
 
 BlobStore.prototype.createWriteStream = function(opts, cb) {
+  if (typeof opts === 'string') opts = {key:opts}
   if (opts.name && !opts.key) opts.key = opts.name
 
   var key = join(this.path, opts.key)
@@ -52,11 +53,13 @@ BlobStore.prototype.createWriteStream = function(opts, cb) {
 }
 
 BlobStore.prototype.createReadStream = function(opts) {
+  if (typeof opts === 'string') opts = {key:opts}
   var key = join(this.path, opts.key)
   return fs.createReadStream(key, opts)
 }
 
 BlobStore.prototype.exists = function(opts, cb) {
+  if (typeof opts === 'string') opts = {key:opts}
   var key = join(this.path, opts.key)
   fs.stat(key, function(err, stat) {
     if (err && err.code !== 'ENOENT') return cb(err)
@@ -65,6 +68,7 @@ BlobStore.prototype.exists = function(opts, cb) {
 }
 
 BlobStore.prototype.remove = function(opts, cb) {
+  if (typeof opts === 'string') opts = {key:opts}
   var key = join(this.path, opts.key)
   fs.unlink(key, function(err) {
     if (err && err.code !== 'ENOENT') return cb(err)

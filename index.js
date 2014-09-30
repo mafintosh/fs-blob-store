@@ -69,6 +69,7 @@ BlobStore.prototype.exists = function(opts, cb) {
 
 BlobStore.prototype.remove = function(opts, cb) {
   if (typeof opts === 'string') opts = {key:opts}
+  if (!opts) opts = noop
   var key = join(this.path, opts.key)
   fs.unlink(key, function(err) {
     if (err && err.code !== 'ENOENT') return cb(err)

@@ -52,10 +52,9 @@ BlobStore.prototype.createWriteStream = function(opts, cb) {
   return proxy
 }
 
-BlobStore.prototype.createReadStream = function(opts) {
-  if (typeof opts === 'string') opts = {key:opts}
-  var key = join(this.path, opts.key)
-  return fs.createReadStream(key, opts)
+BlobStore.prototype.createReadStream = function(key, opts) {
+  if (key && typeof key === 'object') return this.createReadStream(key.key, key)
+  return fs.createReadStream(join(this.path, key), opts)
 }
 
 BlobStore.prototype.exists = function(opts, cb) {

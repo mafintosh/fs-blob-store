@@ -55,6 +55,10 @@ BlobStore.prototype.createWriteStream = function(opts, cb) {
 BlobStore.prototype.createReadStream = function(opts) {
   if (typeof opts === 'string') opts = {key:opts}
   var key = join(this.path, opts.key)
+  if (opts.range) {
+    opts.start = opts.range.start;
+    opts.end = opts.range.end;
+  }
   return fs.createReadStream(key, opts)
 }
 

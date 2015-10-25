@@ -25,6 +25,8 @@ ws.write('hello world\n')
 ws.end(function() {
   var rs = blobs.createReadStream({
     key: 'some/path/file.txt'
+    // For range request:
+    // , range: { start: 10, end: 20 }
   })
 
   rs.pipe(process.stdout)

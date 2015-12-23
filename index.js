@@ -8,7 +8,7 @@ var fs = require('fs')
 var noop = function() {}
 
 var join = function(root, dir) {
-  return path.join(root, path.resolve('/', dir))
+  return path.join(root, path.resolve('/', dir).replace(/^[a-zA-Z]:/, ''))
 }
 
 var listen = function(stream, opts, cb) {

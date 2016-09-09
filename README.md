@@ -31,6 +31,25 @@ ws.end(function() {
 })
 ```
 
+## Atomicity
+
+By default, `fs-blob-store` doesn't make atomic writes which may lead to
+partially written files when an error occurs or if the process crashes.
+
+By using the `atomic: true` option, `fs-blob-store` will use
+[fs-write-stream-atomic](https://github.com/npm/fs-write-stream-atomic)
+which guarantees write atomicity.
+
+Note that when using that option, a key will only start to exist and be
+available for reading once its initial write is fully completed.
+
+```js
+var ws = blobs.createWriteStream({
+  key: 'some/path/file.txt',
+  atomic: true,
+})
+```
+
 ## License
 
 MIT

@@ -4,6 +4,7 @@ var eos = require('end-of-stream')
 var duplexify = require('duplexify')
 var path = require('path')
 var fs = require('fs')
+var createAtomicWriteStream = require('fs-write-stream-atomic')
 
 var noop = function() {}
 
@@ -26,6 +27,8 @@ var BlobStore = function(opts) {
 
   this.path = opts.path
   this.cache = LRU(opts.cache || 100)
+  this.fsCreateWriteStream = opts.atomic ?
+    createAtomicWriteStream : fs.createWriteStream
 }
 
 BlobStore.prototype.createWriteStream = function(opts, cb) {
@@ -35,8 +38,9 @@ BlobStore.prototype.createWriteStream = function(opts, cb) {
   var key = join(this.path, opts.key)
   var dir = path.dirname(key)
   var cache = this.cache
+  var createWriteStream = this.fsCreateWriteStream
 
-  if (cache.get(dir)) return listen(fs.createWriteStream(key, opts), opts, cb)
+  if (cache.get(dir)) return listen(createWriteStream(key, opts), opts, cb)
 
   var proxy = listen(duplexify(), opts, cb)
 
@@ -46,7 +50,7 @@ BlobStore.prototype.createWriteStream = function(opts, cb) {
     if (proxy.destroyed) return
     if (err) return proxy.destroy(err)
     cache.set(dir, true)
-    proxy.setWritable(fs.createWriteStream(key, opts))
+    proxy.setWritable(createWriteStream(key, opts))
   })
 
   return proxy

@@ -7,11 +7,11 @@ const fs = require('fs')
 
 const noop = function() {}
 
-function join(root, dir) {
+const join = function(root, dir) {
   return path.join(root, path.resolve('/', dir).replace(/^[a-zA-Z]:/, ''))
 }
 
-function listen(stream, opts, cb) {
+const listen = function(stream, opts, cb) {
   if (!cb) return stream
   eos(stream, function(err) {
     if (err) return cb(err)
@@ -43,7 +43,7 @@ BlobStore.prototype.createWriteStream = function(opts, cb) {
   proxy.setReadable(false)
 
   mkdirp(dir)
-    .then((made) => {
+    .then((madeDirectory) => {
     cache.set(dir, true)
     proxy.setWritable(fs.createWriteStream(key, opts))
   }).catch((err) => {
@@ -55,7 +55,6 @@ BlobStore.prototype.createWriteStream = function(opts, cb) {
 }
 
 BlobStore.prototype.createReadStream = function(key, opts) {
-  console.log('createReadStream', opts)
   if (key && typeof key === 'object') return this.createReadStream(key.key, key)
   return fs.createReadStream(join(this.path, key), opts)
 }
@@ -70,7 +69,6 @@ BlobStore.prototype.exists = function(opts, cb) {
 }
 
 BlobStore.prototype.remove = function(opts, cb) {
-  console.log(opts)
   if (typeof opts === 'string') opts = {key:opts}
   if (!opts) opts = noop
   const key = join(this.path, opts.key)

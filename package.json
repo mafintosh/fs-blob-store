@@ -7,7 +7,7 @@
     "duplexify": "^4.1.1",
     "end-of-stream": "^1.4.4",
     "lru-cache": "^6.0.0",
-    "mkdirp": "^1.0.4"
+    "mkdirp-classic": "^0.5.3"
   },
   "devDependencies": {
     "abstract-blob-store": "^3.3.5",

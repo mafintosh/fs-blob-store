@@ -1,4 +1,4 @@
-const mkdirp = require('mkdirp')
+const mkdirp = require('mkdirp-classic')
 const LRU = require('lru-cache')
 const eos = require('end-of-stream')
 const duplexify = require('duplexify')
@@ -42,13 +42,12 @@ BlobStore.prototype.createWriteStream = function(opts, cb) {
 
   proxy.setReadable(false)
 
-  mkdirp(dir)
-    .then((madeDirectory) => {
-    cache.set(dir, true)
-    proxy.setWritable(fs.createWriteStream(key, opts))
-  }).catch((err) => {
+  mkdirp(dir, function (err) {
     if (proxy.destroyed) return
     if (err) return proxy.destroy(err)
+
+    cache.set(dir, true)
+    proxy.setWritable(fs.createWriteStream(key, opts))
   })
 
   return proxy

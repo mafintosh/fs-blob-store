@@ -1,11 +1,11 @@
-var tape = require('tape')
-var tests = require('abstract-blob-store/tests')
-var fs = require('./')
-var os = require('os')
-var path = require('path')
-var rimraf = require('rimraf')
+const tape = require('tape')
+const tests = require('abstract-blob-store/tests')
+const fs = require('./')
+const os = require('os')
+const path = require('path')
+const rimraf = require('rimraf')
 
-var common = {
+const common = {
   setup: function(t, cb) {
     // make a new blobs instance on every test
     cb(null, fs(path.join(os.tmpdir(), ''+process.pid)))

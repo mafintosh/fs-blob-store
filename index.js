@@ -59,11 +59,18 @@ BlobStore.prototype.createReadStream = function(key, opts) {
 }
 
 BlobStore.prototype.exists = function(opts, cb) {
+  this.stat(opts, function(err, stat) {
+    if (err && err.code !== 'ENOENT') return cb(err)
+    cb(null, !!stat)
+  })
+}
+
+BlobStore.prototype.stat = function(opts, cb) {
   if (typeof opts === 'string') opts = {key:opts}
   const key = join(this.path, opts.key)
   fs.stat(key, function(err, stat) {
-    if (err && err.code !== 'ENOENT') return cb(err)
-    cb(null, !!stat)
+    if (err) return cb(err)
+    cb(null, stat)
   })
 }
 
